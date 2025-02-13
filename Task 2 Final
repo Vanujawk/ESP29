@@ -1,0 +1,47 @@
+// Task 2 Potentiometer 
+// Perfectly working code
+// Capable of changing the direction backwards and forwards 
+// Full control over speed
+
+#include "mbed.h"
+#include "C12832.h"
+
+
+DigitalOut enable(PA_14);
+DigitalOut Bipolar(PA_13);
+DigitalOut Bipolar2 (PC_12);
+
+PwmOut motor_speed (PC_6);
+PwmOut motor_speed2 (PC_8);
+
+AnalogIn pot1(A0); 
+AnalogIn pot2(A1); 
+
+// LCD display on the Mbed Application Shield (typical wiring):
+C12832 lcd(D11, D13, D12, D7, D10);
+ 
+int main() {
+ enable = 1;
+ Bipolar = 1;
+ Bipolar2 = 1;
+
+    motor_speed.period_us(50);
+    motor_speed2.period_us(50);
+    
+    motor_speed.write(0.0f);
+    motor_speed2.write(0.0f);
+
+
+while (1){
+        float potVal1 = pot1.read();
+        float potVal2 = pot2.read();
+
+        motor_speed.write(potVal1);
+        motor_speed2.write(potVal2);
+
+        lcd.locate(0, 0);
+        lcd.printf("Motor1=%.2f  Motor2=%.2f", potVal1, potVal2);
+        
+        wait(0.1);
+    }
+}
